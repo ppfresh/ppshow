@@ -1,0 +1,1 @@
+<td class="text-center">%field_title%</td>

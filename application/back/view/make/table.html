@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="zh-CN">
+<head>
+    <meta charset="UTF-8"/>
+    <title>控制面板</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"/>
+
+    <link href="__STATIC__/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+    <link href="__STATIC__/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet"/>
+    <link type="text/css" href="__STATIC__/back/css/stylesheet.css" rel="stylesheet" media="screen"/>
+    <!--额外的css-->
+    {block name="appendCss"}{/block}
+</head>
+<body>
+<div id="container">
+
+    <header id="header" class="navbar navbar-static-top">
+        <div class="navbar-header">
+            <a href="" class="navbar-brand">
+                <img src="__STATIC__/image/logo.png" alt="OpenCart" title="OpenCart"/>
+            </a>
+        </div>
+    </header>
+
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-pencil"></i>
+                    代码生成脚手架
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form action="{:url('generate')}" method="post" enctype="multipart/form-data" id="form-set"
+                      class="form-horizontal">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-general">
+
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-table">表名</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="table" value="" placeholder="表名(不需要前缀)" id="input-table" class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-title">标题</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="title" value="" placeholder="表标题" id="input-title" class="form-control"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group" id="field-head">
+                                <div class="col-sm-2"></div>
+                                <div class="col-sm-2">字段</div>
+                                <div class="col-sm-2">名称</div>
+                                <div class="col-sm-1">列表</div>
+                                <div class="col-sm-1">设置</div>
+                                <div class="col-sm-1">排序</div>
+                                <div class="col-sm-1">必须</div>
+                            </div>
+
+                            
+                            
+
+
+                            <div class="form-group required">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-success pull-right" id="button-info">信息</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group required">
+                                <div class="col-sm-12">
+                                    <input type="submit" value="生成" class="btn btn-primary pull-right">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    {include file="common/footer" /}
+
+</div>
+
+<script type="text/javascript" src="__STATIC__/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="__STATIC__/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__STATIC__/back/js/common.js"></script>
+
+<script>
+   $(function(){
+        $('#button-info').click(function(event){
+
+            var url = '{:url("info")}';
+            var data = {table:$("#input-table").val()};
+            //发送ajax请求,获取表名信息
+            $.get(url,data,function(resp){
+                //console.log(resp);
+                $('#input-title').val(resp.title);
+                var fiedlStr = '';
+                //遍历每个字段信息,生成目标html
+                $.each(resp.fields,function(i,field){
+                    fiedlStr += '<div class="form-group">'+
+                                '<div class="col-sm-2"></div>'+
+                                '<div class="col-sm-2"><input type="text" readonly name="fields['+i+'][field]"  value="'+field['column_name']+'" class="form-control"></div>'+
+                                '<div class="col-sm-2"><input type="text" name="fields['+i+'][title]" value="'+field['column_comment']+'" class="form-control"></div>'+
+                                '<div class="col-sm-1"><input type="checkbox" name="fields['+i+'][is_index]" checked value="1"></div>'+
+                                '<div class="col-sm-1"><input type="checkbox" name="fields['+i+'][is_set]" '+('id'==field.column_name || 'create_time'==field.column_name || 'update_time'==field.column_name? '':'checked')+' value="1"></div>'+
+                                '<div class="col-sm-1"><input type="checkbox" name="fields['+i+'][is_sort]" checked value="1" ></div>'+
+                                '<div class="col-sm-1"><input type="checkbox" name="fields['+i+'][is_required]" checked value="1"></div>'+
+                            '</div>';
+                });
+                //添加到Dom中显示
+                $('#field-head').after(fiedlStr);
+
+            },'json');
+
+            //阻止事件默认行为
+            event.preventDefault();
+        })
+   })
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+<td class="text-left">{$vol['%field_name%']}</td>
