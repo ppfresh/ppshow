@@ -16,6 +16,9 @@ return [
 
     //图片上传路径
     'upload_path'            => ROOT_PATH.'public/uploads/',
+    'session_expire'         =>30 * 60, //session的有效期
+
+    /*--------------------以上为自定义的配置--------------------------------------*/
 
     // 应用命名空间
     'app_namespace'          => 'app',

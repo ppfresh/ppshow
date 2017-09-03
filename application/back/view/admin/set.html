@@ -1,0 +1,121 @@
+{extend name="common:layout"}
+
+{block name="content"}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-create" data-toggle="tooltip" title="保存" class="btn btn-primary">
+                    <i class="fa fa-save"></i>
+                </button>
+                <a href="{:url('index')}" data-toggle="tooltip" title="取消" class="btn btn-default">
+                    <i class="fa fa-reply"></i>
+                </a>
+            </div>
+            <h1>管理员管理</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="{:url('manage/dashboard')}">首页</a>
+                </li>
+                <li>
+                    <a href="{:url('index')}">管理员管理</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-pencil"></i>
+                    {if condition="is_null($id)"}添加{else/}编辑{/if}加管理员
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form action="{:url('set',['id'=>$id])}" method="post" enctype="multipart/form-data" id="form-create" class="form-horizontal">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-general">
+                            <!--隐藏域,传递id-->
+                            {if condition="!is_null($id)"}
+                            <input type="hidden" name="id" value="{$id}">
+                            {/if}
+                            <div class="form-group required">
+                         <label class="col-sm-2 control-label" for="input-user">管理员</label>
+                           <div class="col-sm-10">
+                             <input type="text" name="user" value="{$data['user']|default=''}" placeholder="管理员" id="input-user" class="form-control" />
+                               {if condition="isset($errorInfo['user'])"}
+                              <label for="user" class="text-danger">{$errorInfo['user']}
+                              </label>
+                               {/if}
+                         </div>
+                        </div>
+                            {if condition="is_null($id)"}
+                            <div class="form-group required">
+                         <label class="col-sm-2 control-label" for="input-password">密码</label>
+                           <div class="col-sm-10">
+                             <input type="text" name="password" value="{$data['password']|default=''}" placeholder="密码" id="input-password" class="form-control" />
+                               {if condition="isset($errorInfo['password'])"}
+                              <label for="password" class="text-danger">{$errorInfo['password']}
+                              </label>
+                               {/if}
+                         </div>
+                        </div>
+                            {/if}
+
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-sort">角色分组:</label>
+                                <div class="col-sm-10">
+                                    {volist name="roles" id="role"}
+                                    <input type="checkbox" name="roles[]" value="{$role['id']}" class="form-control"
+                                    {if condition="in_array($role['id'],$checkeds)"}
+                                           checked{/if}
+                                    />
+                                    <label class="control">{$role['title']}</label>
+                                    {/volist}
+                                </div>
+                            </div>
+
+                            <div class="form-group required">
+                                <label class="col-sm-2 control-label" for="input-sort">排序</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="sort" value="{$data['sort']|default='0'}" placeholder="排序" id="input-sort" class="form-control" />
+                                    {if condition="isset($errorInfo['sort'])"}
+                                    <label for="sort" class="text-danger">{$errorInfo['sort']}
+                                    </label>
+                                    {/if}
+                                </div>
+                        </div>
+                            
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="appendJs"}
+<script type="text/javascript" src="__STATIC__/validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="__STATIC__/validate/additional-methods.min.js"></script>
+<script type="text/javascript" src="__STATIC__/validate/localization/messages_zh.min.js"></script>
+
+
+<script>
+    $('#form-create').validate({
+        rules:{
+            //根据情况定义验证规则
+        },
+        //内部的样式类,红色错误,可选的
+        errorClass:"text-danger",
+
+        messages:{
+            
+        }
+    })
+
+
+
+</script>
+{/block}}
