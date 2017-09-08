@@ -1,0 +1,191 @@
+{extend name="front@common/layout" /}
+
+{block name="content"}
+<div class="container">
+    <div class="row">
+        <div id="content" class="col-sm-12">
+            <div class="content_top">
+                <div id="slideshow0" class="owl-carousel slideshow">
+                    <div class="item">
+                        <a href="">
+                            <img src="__STATIC__/image/banner/banner-1.jpg" alt="glasses-banner1" class="img-responsive" />
+                        </a>
+                    </div>
+                    <!--<div class="item">-->
+                        <!--<a href="">-->
+                            <!--<img src="__STATIC__/image/banner/banner-2.jpg" alt="glasses-banner1" class="img-responsive" />-->
+                        <!--</a>-->
+                    <!--</div>-->
+                </div>
+
+                <script type="text/javascript"><!--
+                $(document).ready(function() {
+                    $('#slideshow0').owlCarousel({
+                        items: 1, //显示数量
+                        loop: true, //循环滚动
+                        autoplay: true, //自动播放
+                        autoplayTimeout: 3000, //自动切换时间（毫秒）
+                        autoplayHoverPause: true, //鼠标移动到图片上面时，是否暂停自动播放
+                        autoplaySpeed: 300, //自动播放图片切换动画时长
+                        navSpeed: 400, //左右切换按钮图片切换动画时长
+                        dotsSpeed: 300, //点击图片下方黑点图片切换动画时长
+                        nav: true, //是否显示左右切换按钮
+                        navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'], //左右切换按钮图标
+                        dots: true, //是否显示图片下方黑点
+                    });
+                });
+                --></script>
+
+                <h2 class="widget-title">
+                    <span>最新商品</span>
+                </h2>
+                <div class="row" id="conainer-new">
+                    <div class="product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="product-wrapper">
+                            <div class="product-image">
+                                <a href="">
+                                    <img src="__STATIC__/image/product/product-7.jpg" alt="" title="" class="img-responsive" />
+                                </a>
+                            </div>
+                            <div class="product-info">
+                                <div class="product-name">
+                                    <a href="">商品名称</a>
+                                </div>
+                                <div class="product-description">
+                                    <p>..</p>
+                                </div>
+                                <div class="product-rating">
+                        <span class="fa fa-stack">
+                          <i class="fa fa-star fa-stack-2x"></i>
+                        </span>
+                                    <span class="fa fa-stack">
+                          <i class="fa fa-star fa-stack-2x"></i>
+                        </span>
+                                    <span class="fa fa-stack">
+                          <i class="fa fa-star fa-stack-2x"></i>
+                        </span>
+                                    <span class="fa fa-stack">
+                          <i class="fa fa-star fa-stack-2x"></i>
+                        </span>
+                                    <span class="fa fa-stack">
+                          <i class="fa fa-star fa-stack-2x"></i>
+                        </span>
+                                </div>
+                                <div class="product-price">
+                                    <span class="price-new">￥0.00</span>
+                                    <span class="price-old">￥0.00</span>
+                                </div>
+                                <div class="product-action">
+                                    <button type="button" class="add-to-cart" onclick="cart.add('80');">
+                                        <i class="fa fa-shopping-cart"></i>
+                                        <span>加入购物车</span>
+                                    </button>
+                                    <div class="ps-add-buyincang" id="btn-visible">
+                                        <button type="button" class="wishlist" onclick="wishlist.add('80');">
+                                            <i class="fa fa-heart-o"></i>
+                                            <span>收藏</span>
+                                        </button>
+                                        <button type="button" class="compare" onclick="compare.add('80');">
+                                            <i class="fa fa-bars"></i>
+                                            <span>对比</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+<!-- 最新商品展示 -->
+<script>
+$(function(){
+
+    var url = urlProductList;
+    var data = {
+        type:'new',
+        limit:4
+    }
+
+    $.get(url , data ,function(resp){
+        if(resp.error){
+            console.log(resp.errorInfo);
+            return ;
+        }
+
+        //没有出错
+        
+        $each(resp.data,function(i,product){
+            var html = '<div class="product-layout product-grid col-lg-3 col-md-3 col-sm-6 col-xs-12">';
+                html += '<div class="product-wrapper">';
+                html += '<div class="product-image">';
+                html += '<a href="">';
+                html += '<img src="__STATIC__/image/product/product-7.jpg" alt="" title="" class="img-responsive" />';
+                html += '</a>';
+                html += '</div>';
+                html += '<div class="product-info">';
+                html += '<div class="product-name">';
+                html += '<a href="">商品名称</a>';
+                html += '</div>';
+                html += '<div class="product-description">';
+                html += '<p>..</p>';
+                html += '</div>';
+                html += '<div class="product-rating">';
+                html += '<span class="fa fa-stack">';
+                html += '<i class="fa fa-star fa-stack-2x"></i>';
+                html += '</span>';
+                html += '<span class="fa fa-stack">';
+                html += '<i class="fa fa-star fa-stack-2x"></i>';
+                html += '</span>';
+                html += '<span class="fa fa-stack">';
+                html += '<i class="fa fa-star fa-stack-2x"></i>';
+                html += '</span>';
+                html += '<span class="fa fa-stack">';
+                html += '<i class="fa fa-star fa-stack-2x"></i>';
+                html += '</span>';
+                html += '<span class="fa fa-stack">';
+                html += '<i class="fa fa-star fa-stack-2x"></i>';
+                html += '</span>';
+                html += '</div>';
+                html += '<div class="product-price">';
+                html += '<span class="price-new">￥0.00</span>';
+                html += '<span class="price-old">￥0.00</span>';
+                html += '</div>';
+                html += '<div class="product-action">';
+                html += '<button type="button" class="add-to-cart" onclick="">';
+                html += '<i class="fa fa-shopping-cart"></i>';
+                html += '<span>加入购物车</span>';
+                html += '</button>';
+                html += '<div class="ps-add-buyincang" id="btn-visible">';
+                html += '<button type="button" class="wishlist" onclick="">';
+                html += '<i class="fa fa-heart-o"></i>';
+                html += '<span>收藏</span>';
+                html += '</button>';
+                html += '<button type="button" class="compare" onclick="">';
+                html += '<i class="fa fa-bars"></i>';
+                html += '<span>对比</span>';
+                html += '</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+
+                $('#container-new').appen(html);
+        });
+
+        
+
+
+    },'json');
+
+
+})
+
+</script>

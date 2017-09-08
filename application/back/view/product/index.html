@@ -1,0 +1,176 @@
+{extend name="common:layout"}
+
+{block name="content"}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                {if condition="$type == 'circle'"}
+                <!-- 回收站 -->
+                <a href="{:url('index')}" data-toggle="tooltip" title="返回列表" class="btn btn-primary"> <i class="fa fa-list"></i>
+                </a>
+                <button type="button" data-toggle="tooltip" title="还原" id="button_batch-undo" class="btn btn-primary" onclick="{$('#input-operate').val('undo');$('#form-index').submit();}">
+                    <i class="fa fa-undo"></i>
+                </button>
+                </a>
+                <button type="button" data-toggle="tooltip" title="彻底删除" id="button_batch-relDelete" class="btn btn-danger" onclick="if(confirm('确定彻底删除?')) {$('#input-operate').val('relDelete');$('#form-index').submit();}">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                {else /}
+                <!-- 商品列表 -->
+                <a href="{:url('index',['type'=>'circle'])}" data-toggle="tooltip" title="回收站" class="btn btn-primary"> <i class="fa fa-refresh"></i>
+                </a>
+                <a href="{:url('set')}" data-toggle="tooltip" title="新增" class="btn btn-primary"> <i class="fa fa-plus"></i>
+                </a>
+                <button type="button" data-toggle="tooltip" title="组合" id="button_batch-undo" class="btn btn-primary" onclick="{$('#input-operate').val('group');$('#form-index').submit();}">
+                    <i class="fa fa-group"></i>
+                </button>
+                <button type="button" data-toggle="tooltip" title="删除" id="button_batch-delete" class="btn btn-danger" onclick="{$('#input-operate').val('delete');$('#form-index').submit();}">
+                    <i class="fa fa-trash-o"></i>
+                </button>
+                {/if}
+            </div>
+            <h1>产品表管理</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="">首页</a>
+                </li>
+                <li>
+                    <a href="">产品表管理</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+            {if condition="$type" =='circle'}
+                <h3 class="panel-title">
+                    <i class="fa fa-refresh"></i>
+                    回收站
+                </h3>
+            {else /}
+                <h3 class="panel-title">
+                    <i class="fa fa-list"></i>
+                   产品表列表
+                </h3>
+            {/if}
+            </div>
+            <div class="panel-body">
+                <!-- <form action="{:url('index')}" method="get" >
+                <div class="well">
+                    <div class="row">
+                         <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="control-label" for="input-filter_title">产品表名称</label>
+                                <input type="text" name="filter_title" value="{$filter_title|default=''}" placeholder="产品表名称" id="input-filter_title" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label" for="input-price">销售价格</label>
+                                <input type="text" name="filter_price" value="" placeholder="销售价格" id="input-price" class="form-control" />
+                            </div>
+                         </div>
+                         <div class="col-sm-12"> 
+                            <div class="form-group">
+                                <label class="control-label" for="input-status">状态</label>
+                                <select name="filter_status" id="input-status" class="form-control">
+                                    <option value="*"></option>
+                                    <option value="1">启用</option>
+                                    <option value="0">停用</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="button-filter" class="btn btn-primary pull-right">
+                                <i class="fa fa-search"></i>
+                                筛选
+                            </button>
+                        </div> 
+                    </div>
+                </div>
+                </form> -->
+                <form action="{:url('batch')}" method="post" id="form-index">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+                                <td style="width: 1px;" class="text-center">
+                                    <input type="checkbox" id="select_all" />
+                                    <input type="hidden" id="input-operate" value="" name="operate">
+                                </td>
+                                
+                                    <td class="text-left">
+                                 	<a href="{:urlOrder('index',$pageQuery,'id',$order_field,$order_type)}" class="{:classOrder('id',$order_field,$order_type)}">ID</a>
+                                    </td> 
+                                    <td class="text-left">
+                                 	<a href="{:urlOrder('index',$pageQuery,'title',$order_field,$order_type)}" class="{:classOrder('title',$order_field,$order_type)}">名称</a>
+                                    </td>
+                                    <td class="text-center">型号</td>
+                                    <td class="text-center"><a href="{:urlOrder('index',$pageQuery,'group_id',$order_field,$order_type)}" class="{:classOrder('group_id',$order_field,$order_type)}">组(id)</a></td>
+                                    <td class="text-center">图片缩略图</td>
+                                    <td class="text-left">
+                                 	<a href="{:urlOrder('index',$pageQuery,'is_sale',$order_field,$order_type)}" class="{:classOrder('is_sale',$order_field,$order_type)}">是否上架</a>
+                                    </td>
+                                    <td class="text-left">
+                                 	<a href="{:urlOrder('index',$pageQuery,'sort',$order_field,$order_type)}" class="{:classOrder('sort',$order_field,$order_type)}">排序</a>
+                                    </td>
+                                
+
+                                <td class="text-center">管理</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {volist name="rows" id="vol"}
+                            <tr>
+                                <td class="text-center">
+                                <input type="checkbox" name="selected[]" value="{$vol['id']}" />
+                                </td>
+                                
+                                <td class="text-center">{$vol['id']}</td>
+                                <td class="text-left">{$vol['title']}</td>
+                                <td class="text-left">{$extends[$vol['id']]|default=""}</td>
+                                <td class="text-left">{if condition="!empty($vol['group_id'])"}{$vol['group_id']}{else /}未分组{/if}</td>
+                                <td class="text-center" >
+                                    <img src="__ROOT__/thumb/{$vol['image_thumb']}" alt="" style="max-width:150px;">
+                                <td class="text-center">{$vol['is_sale']}</td>
+                                <td class="text-center">{$vol['sort']}</td>
+
+                                <td class="text-right">
+                                    <a href="{:url('set',['id'=>$vol['id']])}" data-toggle="tooltip" title="编辑" class="btn btn-primary">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    <a href="{:url('copy',['id'=>$vol['id']])}" data-toggle="tooltip" title="复制" class="btn btn-primary">
+                                        <i class="fa fa-copy"></i>
+                                    </a>
+                                    <a href="{:url('unGroup',['id'=>$vol['id']])}" data-toggle="tooltip" title="解除所属组" class="btn btn-primary">
+                                        <i class="fa fa-circle"></i>
+                                    </a>
+                                    <!--<a href="{:url('Back/Goods/option')}" data-toggle="tooltip" title="管理选项" class="btn btn-primary">-->
+                                        <!--<i class="fa">O</i>-->
+                                    <!--</a>-->
+                                    <!-- <a href="{:url('Back/Goods/copy')}" data-toggle="tooltip" title="复制" class="btn btn-primary">
+                                      <i class="fa fa-copy"></i>
+                                    </a> -->
+                                </td>
+                            </tr>
+                            {/volist}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="appendJs"}
+<script>
+    $(function(){
+        $('#select_all').click(function(){
+            $(":checkbox[name='selected[]']").prop('checked',$(this).prop('checked'));
+        })
+    })
+</script>
+{/block}

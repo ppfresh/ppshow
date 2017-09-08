@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BuyPlus(败家Shopping）</title>
+    <meta name="description" content="BuyPlus(败家Shopping）" />
+    <meta name="keywords" content= "BuyPlus(败家Shopping）" />
+    <link href="__STATIC__/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="__STATIC__/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="__STATIC__/front/css/stylesheet.css" rel="stylesheet">
+    <link href="image/catalog/cart.png" rel="icon" />
+    <!-- 扩展Css样式用 -->
+    {block name="appendCss"}{/block}
+
+
+    </head>
+    <body class="common-home">
+
+    {include file="front@common/nav" /}
+    {include file="front@common/header" /}
+    {include file="front@common/menu" /}
+
+
+    {block name="content"}{/block}
+
+    {include file="front@common/footer" /}
+    <!-- 引入自定义的前台变量(为了防止一些引入的方法文件里php方法不解析) -->
+    {include file="front@common/jsInit" /}
+
+    <script src="__STATIC__/jquery/jquery-1.12.4.min.js" type="text/javascript"></script>
+    <script src="__STATIC__/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="__STATIC__/front/js/common.js" type="text/javascript"></script>
+    <script src="__STATIC__/front/js/init.js"></script>
+    <script src="__STATIC__/front/js/category.js"></script>
+
+
+    <!-- 扩展Js用 -->
+    {block name="appendJs"}{/block}
+
+</body>
+</html>

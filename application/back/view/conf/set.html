@@ -1,0 +1,115 @@
+{extend name="common/layout" /}
+
+{block name="content"}
+<div id="content">
+    <div class="page-header">
+        <div class="container-fluid">
+            <div class="pull-right">
+                <button type="submit" form="form-set" data-toggle="tooltip" title="保存" class="btn btn-primary">
+                    <i class="fa fa-save"></i>
+                </button>
+                <button type="reset" form="form-set" data-toggle="tooltip" title="还原" class="btn btn-success">
+                    <i class="fa fa-undo"></i>
+                </button>
+            </div>
+            <h1>配置管理</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="{:url('manage/dashboard')}">首页</a>
+                </li>
+                <li>
+                    <a href="{:url('set')}">配置</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <i class="fa fa-pencil"></i>
+                    配置设置
+                </h3>
+            </div>
+            <div class="panel-body">
+                <!-- <ul class="nav nav-tabs">
+                    {volist name="configs" id="config"}
+                    <li class="{if condition="$i==1"}active{/if}">
+                        <a href="#tab-{$key}" data-toggle="tab" aria-expanded="false">{$key}</a>
+                    </li>
+                    {/volist}
+                </ul> -->
+                <ul class="nav nav-tabs">
+                    {volist name="configs" id="config"}
+                    <li class="{if condition="$i==1"}active{/if}">
+                        <a href="#tab-{$key}" data-toggle="tab" aria-expanded="false">{$key}</a>
+                    </li>
+                    {/volist}
+                </ul>
+
+                <form action="{:url('set')}" method="post" class="form-horizontal" id="form-set">
+                    <div class="tab-content">
+                       {volist name="configs" id="config"}
+                        <div class="tab-pane {if condition="$i==1"}active{/if}" id="tab-{$key}">
+                            <!-- 将外层变量值分配到变量上,以便在下面使用 -->
+                            {assign name="group" value="$key" /}
+
+                            {volist name="config" id="value"}
+                            <div class="form-group ">
+                                <label class="col-sm-2 control-label" for="input-{$key}">{$key}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="configs[{$group}][{$key}]" value="{$value}" placeholder="{$key}" id="input-{$key}" class="form-control"/>
+                                </div>
+                            </div>
+                            {/volist}
+                        </div>
+                       {/volist}
+
+                    </div>
+
+                </form>
+                <!-- <form action="{:url('set')}" method="post" enctype="multipart/form-data" id="form-set"
+                      class="form-horizontal">
+                    <div class="tab-content">
+                        {volist name="configs" id="config"}
+                        <div class="tab-pane {if condition="$i==1"}active{/if}" id="tab-{$key}">
+                            {assign name="group" value="$key" /}
+
+                            {volist name="config" id="value"}
+                            <div class="form-group ">
+                                <label class="col-sm-2 control-label" for="input-{$key}">{$key}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" name="configs[{$group}][{$key}]" value="{$value}" placeholder="{$key}" id="input-{$key}" class="form-control"/>
+                                </div>
+                            </div>
+                            {/volist}
+                        </div>
+                        {/volist}
+
+                    </div>
+                </form> -->
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+
+{block name="appendJs"}
+<script type="text/javascript" src="__STATIC__/validate/jquery.validate.min.js"></script>
+<script type="text/javascript" src="__STATIC__/validate/additional-methods.min.js"></script>
+<script type="text/javascript" src="__STATIC__/validate/localization/messages_zh.min.js"></script>
+
+<script>
+    $('#form-set').validate({
+        rules: {
+            // 添加自己的规则
+        },
+        // 内部的样式类, 红字错误, 可选的
+        errorClass: 'text-danger',
+        messages: {
+
+        }
+    });
+</script>
+{/block}
