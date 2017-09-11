@@ -1,0 +1,55 @@
+{extend name="front@common/layout" /}
+
+{block name="content"}
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <a href="">
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="">账户</a>
+        </li>
+        <li>
+            <a href="">登录</a>
+        </li>
+    </ul>
+    <div class="row">
+        <div id="content" class="col-sm-9">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="well">
+                        <h2>会员登录</h2>
+                        <p> <strong>如果您已经是本站会员，请直接登录。</strong>
+                        </p>
+                        <form action="http://php.kang.com/test/s/index.php?route=account/login" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="control-label" for="input-email">邮箱地址/手机号码</label>
+                                <input type="text" name="email" value="" placeholder="邮箱地址/手机号码" id="input-email" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="input-password">密码</label>
+                                <input type="password" name="password" value="" placeholder="密码" id="input-password" class="form-control" />
+                                <a href="">忘记密码？</a>
+                            </div>
+                            <input type="submit" value="登录" class="btn btn-primary" />
+                        </form>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="well">
+                        <h2>用户注册</h2>
+                        <p> <strong>注册账户</strong>
+                        </p>
+                        <p>注册一个账户以便您更快捷地购物， 查看订单状态， 查看订购记录， 和更多的管理项目。</p>
+                        <a href="" class="btn btn-primary">继续</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {include file="member/right" /}
+    </div>
+</div>
+{/block}

@@ -1,0 +1,172 @@
+{extend name="front@common:layout"}
+
+{block name="content"}
+
+<div class="container">
+    <ul class="breadcrumb">
+        <li>
+            <a href="{:url('/html/index.html')}">
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+        <li>
+            <a href="{:url('/html/cart.html')}">购物车内的商品</a>
+        </li>
+    </ul>
+    <div class="row">
+        <form action="{:url('front/member/checkout')}" method="post" enctype="multipart/form-data">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="cart-product-list">
+                    <thead>
+                    <tr>
+                        <td style="width:1px;" class="text-center">
+                            <input type="checkbox" id="checked-all" class="input-primary">
+                        </td>
+                        <td class="text-center">图片</td>
+                        <td class="text-left">商品名称</td>
+                        <td class="text-left">型号</td>
+                        <td class="text-left">数量</td>
+                        <td class="text-right">单价</td>
+                        <td class="text-right">总计</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-8">
+                    <table class="table table-bordered">
+                        <tr>
+                            <td class="text-right"><strong>商品总额:</strong>
+                            </td>
+                            <td class="text-right" id="cart-amount">￥</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="buttons">
+                <div class="pull-left">
+                    <a href="{:url('/html/index')}" class="btn btn-default">继续购物</a>
+                </div>
+                <div class="pull-right">
+                    <input type="submit" class="btn btn-primary" value="去结算">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{/block}
+{block name="appendJs"}
+<script>
+
+	
+    
+
+	// 更新购物车展示
+	function refreshCart()
+	{
+		cart.info({
+			success:function(data){
+				//展示
+				$('#cart-amount').text('￥' + data.amount);
+				$('#cart-product-list tbody').empty();
+				
+				$.each(data.productList, function(i, product)
+				{
+					var html = '';
+					html += '<tr>';
+					html += '<td class="text-center">';
+					html += '<input type="checkbox" name="selected[]" value="'+product.id+'" class="form-control">'; 
+					html += '</td>'; 
+					html += '<td class="text-center">';
+					html += '<a href="">';
+					html += '<img src="'+ThumbPath+product.image_thumb+'" style="max-height: 60px;" alt="" title="" class="img-thumbnail"/>';                   
+					html += '</a>';                   
+					html += '</td>';                   
+					html += '<td class="text-left">';                   
+					html += '<a href="">'+product.title+'</a>';                   
+					html += '</td>';                   
+					html += '<td class="text-left">';                   
+					html += (product.valueList ? product.valueList : '');                       
+					html += '</td>';                  
+					html += '<td class="text-left">';                   
+					html += '<div class="input-group btn-block" style="max-width: 200px;">';
+					html += '<input type="text" name="product['+product.id+']" id="quantity-'+product.id+'" value="'+product.buyQuantity+'" size="1" class="form-control"/>';
+					html += '<span class="input-group-btn">';                   
+					html += '<button id="cart-update" data-toggle="tooltip" data-product-id="'+product.id+'" title="更新" class="btn btn-primary">';                   
+					html += '<i class="fa fa-refresh"></i>';                   
+					html += '</button>';                   
+					html += '<button id="cart-remove" data-toggle="tooltip" data-product-id="'+product.id+'" title="移除" class="btn btn-danger" >';                   
+					html += '<i class="fa fa-times-circle"></i>';                   
+					html += '</button>';                   
+					html += '</span>';                   
+					html += '</div>';                  
+					html += '</td>';                   
+					html += '<td class="text-right">￥'+product.price+'</td>';                   
+					html += '<td class="text-right">￥'+product.amount+'</td>';                   
+					html += '</tr>';	
+					//展示
+					$('#cart-product-list>tbody').append(html);
+				});
+			}
+		});
+	}
+
+
+	$(function(){
+
+		// 页面初始化时刷新
+    	refreshCart();
+
+		//购物车更新 
+		$('#cart-product-list').delegate('#cart-update','click',function(evt){
+			
+			//更新购物车
+			var url = urlCartUpdate;
+			var product_id = $(this).data('productId');
+			console.log(product_id);
+			var buyQuantity = $('#quantity-'+product_id).val();
+			console.log(buyQuantity);
+			var data={
+				product_id:product_id,
+				buyQuantity:buyQuantity
+			};
+			$.post(url ,data ,function(resp){
+				if(!resp.error){
+					//刷新mini购物车
+					cart.refreshMini();
+					//刷新购物车展示
+					refreshCart();
+				}
+			},'json');
+			evt.preventDefault();
+			
+		});
+
+		//购物车移除
+		$('#cart-product-list').delegate('#cart-remove','click',function(evt){
+
+			var url = urlCartRemove;
+			var product_id = $(this).data('productId');
+			console.log(product_id);
+			var data = {
+				product_id:product_id
+			}
+			$.post(url ,data ,function(resp){
+				if(!resp.error){
+					//刷新mini购物车
+					cart.refreshMini();
+					//刷新购物车展示
+					refreshCart();
+					alert('移除成功!');
+				}
+			},'json');
+
+			// evt.preventDefault();
+		});
+	})
+</script>
+{/block}
